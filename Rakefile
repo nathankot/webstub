@@ -10,9 +10,9 @@ Motion::Project::App.setup do |app|
   gem_name = File.basename(gemspec).gsub("\.gemspec", "")
 
   app.development do
-    app.files += Dir.glob(File.join(File.dirname(__FILE__), "lib/**/*.rb"))
+    app.files += Dir.glob(File.join(File.dirname(__FILE__), "lib/#{gem_name}/**/*.rb"))
 
-#    app.files << File.join(File.dirname(__FILE__), "lib/spec/spec_delegate.rb")
+    app.files << File.join(File.dirname(__FILE__), "lib/spec/spec_delegate.rb")
     app.delegate_class = "SpecDelegate"
   end
 

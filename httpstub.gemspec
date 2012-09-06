@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+require File.join(File.dirname(__FILE__), "lib/httpstub/version")
 
 Gem::Specification.new do |gem|
   gem.authors       = ["AUTHOR"]
@@ -9,7 +10,7 @@ Gem::Specification.new do |gem|
 
   gem.files         = `git ls-files`.split($\)
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.name          = gem_name
+  gem.name          = "httpstub"
   gem.require_paths = ["lib"]
-  gem.version       = "0.0.0"
+  gem.version       = HTTPStub::VERSION
 end
