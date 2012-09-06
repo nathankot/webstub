@@ -9,7 +9,10 @@ module HTTPStub
     end
 
     def add_stub(method, path)
-      @stubs << Stub.new(method, path)
+      stub = Stub.new(method, path)
+      @stubs << stub
+
+      stub
     end
 
     def get_stub(method, path)

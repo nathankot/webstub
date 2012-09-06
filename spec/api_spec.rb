@@ -35,7 +35,7 @@ describe HTTPStub do
 
     describe "when a request matches a previously set stub" do
       before do
-        HTTPStub.stub_request(:get, @url)
+        HTTPStub.stub_request(:get, @url).to_return(body:"hello")
 
         @response = Pointer.new(:object)
         @error = Pointer.new(:object) 
@@ -47,7 +47,7 @@ describe HTTPStub do
       end
 
       it "returns a non-nil body" do
-        @body.length.should.be > 0
+        @body.length.should.be == 5
       end
 
       it "returns a nil error" do

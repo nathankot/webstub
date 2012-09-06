@@ -7,12 +7,6 @@ describe HTTPStub::Stub do
     @stub.should.not.be.nil
   end
 
-  describe "#body" do
-    it "returns a body" do
-      @stub.body.should == "hello" 
-    end
-  end
-
   describe "#matches?" do
     it "returns true when provided an identical stub" do
       @stub.matches?(@stub.dup).should.be.true
@@ -24,6 +18,19 @@ describe HTTPStub::Stub do
 
     it "returns false when the method differs" do
       @stub.matches?(HTTPStub::Stub.new(:post, "http://www.yahoo.com/")).should.be.false
+    end
+  end
+
+  describe "#response_body" do
+    it "returns the response body" do
+      @stub.response_body.should == "" 
+    end
+  end
+
+  describe "#to_return" do
+    it "sets the response" do
+      @stub.to_return(body: "hello")
+      @stub.response_body.should.be == "hello"
     end
   end
 end

@@ -23,7 +23,7 @@ module HTTPStub
       response = NSHTTPURLResponse.alloc.initWithURL(request.URL, statusCode:200, HTTPVersion:"HTTP/1.1", headerFields:{})
 
       client.URLProtocol(self, didReceiveResponse:response, cacheStoragePolicy:NSURLCacheStorageNotAllowed)
-      client.URLProtocol(self, didLoadData:stub.body)
+      client.URLProtocol(self, didLoadData:stub.response_body)
       client.URLProtocolDidFinishLoading(self)
     end
 
