@@ -35,7 +35,7 @@ describe HTTPStub do
 
     describe "when a request matches a previously set stub" do
       before do
-        HTTPStub.stub_request(:get, @url).to_return(body:"hello")
+        HTTPStub.stub_request(:get, @url).to_return(body:"hello", headers: {"Content-Type" => "text/plain"})
 
         @response = Pointer.new(:object)
         @error = Pointer.new(:object) 
@@ -44,6 +44,10 @@ describe HTTPStub do
 
       it "returns a non-nil response" do
         @response[0].should.not.be.nil
+      end
+
+      it "has the content-type header" do
+        @response[0].allHeaderFields["Content-Type"].should == "text/plain"
       end
 
       it "returns a non-nil body" do

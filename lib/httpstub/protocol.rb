@@ -14,16 +14,21 @@ module HTTPStub
       
       stub = HTTPStub::Registry.instance.get_stub(request.HTTPMethod, request.URL.absoluteString)
       unless stub
+        puts "*** WARNING: blocking #{request.URL.absoluteString} from accessing the network"
+
         error = NSError.errorWithDomain("httpstub", code:0, userInfo:{ NSLocalizedDescriptionKey: "network access is not permitted!"})
         client.URLProtocol(self, didFailWithError:error)
 
         return
       end
 
-      response = NSHTTPURLResponse.alloc.initWithURL(request.URL, statusCode:200, HTTPVersion:"HTTP/1.1", headerFields:{})
+      response = NSHTTPURLResponse.alloc.initWithURL(request.URL,
+                                                     statusCode:200,
+                                                     HTTPVersion:"HTTP/1.1",
+                                                     headerFields:stub.response_headers)
 
       client.URLProtocol(self, didReceiveResponse:response, cacheStoragePolicy:NSURLCacheStorageNotAllowed)
-      client.URLProtocol(self, didLoadData:stub.response_body)
+      client.URLProtocol(self, didLoadData:stub.response_body.dataUsingEncoding(NSUTF8StringEncoding))
       client.URLProtocolDidFinishLoading(self)
     end
 

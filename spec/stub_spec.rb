@@ -28,9 +28,14 @@ describe HTTPStub::Stub do
   end
 
   describe "#to_return" do
-    it "sets the response" do
+    it "sets the response body" do
       @stub.to_return(body: "hello")
       @stub.response_body.should.be == "hello"
+    end
+
+    it "sets response headers" do
+      @stub.to_return(body: "{}", headers: { "Content-Type" => "application/json" })
+      @stub.response_headers.should.be == { "Content-Type" => "application/json" } 
     end
   end
 end
