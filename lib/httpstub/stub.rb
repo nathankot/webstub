@@ -19,6 +19,17 @@ module HTTPStub
     def to_return(options)
       @response_body = options[:body] || ""
       @response_headers = options[:headers] || {}
+
+      if content_type = options[:content_type]
+        case content_type
+        when :json
+          content_type = "application/json"
+        else
+          content_type = content_type.to_s
+        end
+
+        @response_headers["Content-Type"] = content_type
+      end
     end
   end
 end

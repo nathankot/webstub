@@ -1,17 +1,19 @@
 module HTTPStub
-  def self.stub_request(method, path)
-    HTTPStub::Registry.instance.add_stub(method, path)
-  end
+  module API
+    def self.disable_network_access!
+      Protocol.disableNetworkAccess
+    end
 
-  def self.register
-    NSURLProtocol.registerClass(HTTPStub::Protocol)
-  end
+    def self.enable_network_access!
+      Protocol.enableNetworkAccess
+    end
 
-  def self.reset!
-    HTTPStub::Registry.instance.reset!
-  end
+    def self.stub_request(method, path)
+      Protocol.registry.add_stub(method, path)
+    end
 
-  def self.unregister
-    NSURLProtocol.unregisterClass(HTTPStub::Protocol)
+    def self.reset!
+      Protocol.registry.reset!
+    end
   end
 end

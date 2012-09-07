@@ -1,21 +1,39 @@
 module HTTPStub
   class Protocol < NSURLProtocol
     def self.canInitWithRequest(request)
-      ! request.nil?
+      if registry.get_stub(request.HTTPMethod, request.URL.absoluteString)
+        return true
+      end
+
+      ! isNetworkAccessAllowed
     end
 
     def self.canonicalRequestForRequest(request)
       request
     end
 
+    def self.disableNetworkAccess
+      @network_access = false
+    end
+
+    def self.enableNetworkAccess
+      @network_access = true
+    end
+
+    def self.isNetworkAccessAllowed
+      @network_access.nil? ? true : @network_access
+    end
+
+    def self.registry
+      @registry ||= Registry.new()
+    end
+
     def startLoading
       request = self.request
       client = self.client
       
-      stub = HTTPStub::Registry.instance.get_stub(request.HTTPMethod, request.URL.absoluteString)
+      stub = self.class.registry.get_stub(request.HTTPMethod, request.URL.absoluteString)
       unless stub
-        puts "*** WARNING: blocking #{request.URL.absoluteString} from accessing the network"
-
         error = NSError.errorWithDomain("httpstub", code:0, userInfo:{ NSLocalizedDescriptionKey: "network access is not permitted!"})
         client.URLProtocol(self, didFailWithError:error)
 
@@ -36,3 +54,5 @@ module HTTPStub
     end
   end
 end
+
+NSURLProtocol.registerClass(HTTPStub::Protocol)
