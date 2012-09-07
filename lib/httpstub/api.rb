@@ -19,12 +19,3 @@ module HTTPStub
     end
   end
 end
-
-=begin
-# TODO: remove once define_method is allowed
-class Bacon
-  class Context
-    include HTTPStub::API
-  end
-end
-=end
