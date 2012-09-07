@@ -24,7 +24,6 @@ PLATFORMS
 
 DEPENDENCIES
   coolline
-  guard
   guard-motion!
   rake
   rb-fsevent (~> 0.9.1)
