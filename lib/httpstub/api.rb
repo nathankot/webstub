@@ -1,19 +1,30 @@
 module HTTPStub
   module API
-    def self.disable_network_access!
+    extend self
+
+    def disable_network_access!
       Protocol.disableNetworkAccess
     end
 
-    def self.enable_network_access!
+    def enable_network_access!
       Protocol.enableNetworkAccess
     end
 
-    def self.stub_request(method, path)
+    def stub_request(method, path)
       Protocol.registry.add_stub(method, path)
     end
 
-    def self.reset!
+    def reset!
       Protocol.registry.reset!
     end
   end
 end
+
+=begin
+# TODO: remove once define_method is allowed
+class Bacon
+  class Context
+    include HTTPStub::API
+  end
+end
+=end
