@@ -18,13 +18,8 @@ describe HTTPStub::Protocol do
     end
 
     describe "when network access is disabled" do
-      before do
-        HTTPStub::Protocol.disableNetworkAccess
-      end
-
-      after do
-        HTTPStub::Protocol.enableNetworkAccess
-      end
+      before { HTTPStub::Protocol.disableNetworkAccess }
+      after  { HTTPStub::Protocol.enableNetworkAccess }
 
       it "handles all requests" do
         HTTPStub::Protocol.canInitWithRequest(@request).should.be.true
