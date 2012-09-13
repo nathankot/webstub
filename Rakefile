@@ -19,9 +19,3 @@ Motion::Project::App.setup do |app|
   app.name = gem_name
 end
 
-namespace :spec do
-  desc "Auto-run specs"
-  task :guard do
-    exec({"output" => "test_unit"}, "bundle exec guard")
-  end
-end
