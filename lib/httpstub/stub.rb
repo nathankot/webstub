@@ -1,35 +1,80 @@
 module HTTPStub
   class Stub
-    def initialize(method, path)
-      @method = method.to_s.downcase
-      @path = path
+    METHODS = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"].freeze
+
+    def initialize(method, url)
+      @request_method = canonicalize_method(method)
+      raise ArgumentError, "invalid method name" unless METHODS.include? @request_method
+      
+      @request_url = canonicalize_url(url)
+      @request_headers = nil
+      @request_body = nil
+
       @response_body = ""
       @response_headers = {}
     end
 
-    attr_reader :method
-    attr_reader :path
+    def matches?(method, url, options={})
+      if @request_url != canonicalize_url(url)
+        return false
+      end
+
+      if @request_method != canonicalize_method(method)
+        return false
+      end
+
+      if @request_body
+        if @request_body != options[:body]
+          return false
+        end
+      end
+
+      true
+    end
+
     attr_reader :response_body
     attr_reader :response_headers
 
-    def matches?(stub)
-      @method == stub.method && @path == stub.path
+    def to_return(options)
+      if json = options[:json]
+        @response_body = json
+        @response_headers["Content-Type"] = "application/json"
+
+        if @response_body.is_a? Hash
+          @response_body = JSON.generate(@response_body)
+        end
+      else
+        @response_body = options[:body] || ""
+        @response_headers = options[:headers] || {}
+
+        if content_type = options[:content_type]
+          @response_headers["Content-Type"] = content_type
+        end
+      end
+
+      self
     end
 
-    def to_return(options)
-      @response_body = options[:body] || ""
-      @response_headers = options[:headers] || {}
+    def with(options)
+      if body = options[:body]
+        @request_body = body
 
-      if content_type = options[:content_type]
-        case content_type
-        when :json
-          content_type = "application/json"
-        else
-          content_type = content_type.to_s
+        if @request_body.is_a?(Hash)
+          @request_body = @request_body.inject({}) { |h, (k,v)| h[k.to_s] = v; h }
         end
-
-        @response_headers["Content-Type"] = content_type
       end
+
+      self
+    end
+
+  private
+
+    def canonicalize_method(method)
+      method.to_s.upcase
+    end
+
+    def canonicalize_url(url)
+      url
     end
   end
 end

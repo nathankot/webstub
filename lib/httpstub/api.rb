@@ -11,11 +11,11 @@ module HTTPStub
     end
 
     def stub_request(method, path)
-      Protocol.registry.add_stub(method, path)
+      Protocol.addStub(method, path)
     end
 
-    def reset!
-      Protocol.registry.reset!
+    def reset
+      Protocol.resetStubs
     end
   end
 end

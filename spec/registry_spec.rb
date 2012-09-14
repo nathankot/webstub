@@ -14,21 +14,6 @@ describe HTTPStub::Registry do
     end
   end
 
-  describe "#get_stub" do
-    describe "when a stub matches" do
-      it "returns the stub" do
-        @registry.add_stub(:get, "http://www.yahoo.com/")
-        @registry.get_stub(:get, "http://www.yahoo.com/").should.not.be.nil
-      end
-    end
-
-    describe "when no stub matches" do
-      it "returns nil" do
-        @registry.get_stub(:get, "http://www.google.com/").should.be.nil
-      end
-    end
-  end
-
   describe "#reset!" do
     it "removes all previously set stubs" do
       @registry.add_stub(:get, "http://www.yahoo.com")

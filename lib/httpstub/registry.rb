@@ -11,24 +11,22 @@ module HTTPStub
       stub
     end
 
-    def get_stub(method, path)
-      search = Stub.new(method, path)
-
-      @stubs.each do |stub|
-        if stub.matches?(search)
-          return stub
-        end
-      end
-
-      nil
-    end
-
     def reset!
       @stubs = []
     end
 
     def size
       @stubs.size
+    end
+    
+    def stub_matching(method, url, options={})
+      @stubs.each do |stub|
+        if stub.matches?(method, url, options)
+          return stub
+        end
+      end
+
+      nil
     end
   end
 end

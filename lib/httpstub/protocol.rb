@@ -1,7 +1,11 @@
 module HTTPStub
   class Protocol < NSURLProtocol
+    def self.addStub(*args)
+      registry.add_stub(*args)
+    end
+
     def self.canInitWithRequest(request)
-      if registry.get_stub(request.HTTPMethod, request.URL.absoluteString)
+      if stub_for(request)
         return true
       end
 
@@ -24,16 +28,15 @@ module HTTPStub
       @network_access.nil? ? true : @network_access
     end
 
-    def self.registry
-      @registry ||= Registry.new()
+    def self.resetStubs
+      registry.reset!
     end
 
     def startLoading
       request = self.request
       client = self.client
-      
-      stub = self.class.registry.get_stub(request.HTTPMethod, request.URL.absoluteString)
-      unless stub
+    
+      unless stub = self.class.stub_for(request)
         error = NSError.errorWithDomain("httpstub", code:0, userInfo:{ NSLocalizedDescriptionKey: "network access is not permitted!"})
         client.URLProtocol(self, didFailWithError:error)
 
@@ -51,6 +54,41 @@ module HTTPStub
     end
 
     def stopLoading
+    end
+
+  private
+
+    def self.registry
+      @registry ||= Registry.new()
+    end
+
+    def self.stub_for(request)
+      options = {}
+      if request.HTTPBody
+        options[:body] = parse_body(request)
+      end
+
+      registry.stub_matching(request.HTTPMethod, request.URL.absoluteString, options)
+    end
+
+    def self.parse_body(request)
+      content_type = nil
+
+      request.allHTTPHeaderFields.each do |key, value|
+        if key.downcase == "content-type"
+          content_type = value
+          break
+        end
+      end
+
+      body = NSString.alloc.initWithData(request.HTTPBody, encoding:NSUTF8StringEncoding)
+
+      case content_type
+      when /application\/x-www-form-urlencoded/
+        URI.decode_www_form(body)
+      else
+        body
+      end
     end
   end
 end

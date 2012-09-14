@@ -1,6 +1,6 @@
 describe HTTPStub::API do
   before do
-    HTTPStub::API.reset!
+    HTTPStub::API.reset
     
     @url = "http://www.google.com/"
     @request = NSURLRequest.requestWithURL(NSURL.URLWithString(@url))
@@ -34,7 +34,7 @@ describe HTTPStub::API do
       end
     end
 
-    describe "when a request matches a previously set stub" do
+    describe "when a request matches a stub" do
       before do
         HTTPStub::API.stub_request(:get, @url).to_return(body:"hello", headers: {"Content-Type" => "text/plain"})
 
@@ -61,10 +61,10 @@ describe HTTPStub::API do
     end
   end
 
-  describe ".reset!" do
+  describe ".reset" do
     before do
       HTTPStub::API.stub_request(:get, @url)
-      HTTPStub::API.reset!
+      HTTPStub::API.reset
     end
 
     describe "when network access is disabled" do

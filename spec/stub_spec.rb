@@ -7,17 +7,27 @@ describe HTTPStub::Stub do
     @stub.should.not.be.nil
   end
 
+  it "allows all valid HTTP methods" do
+    HTTPStub::Stub::METHODS.each do |method|
+      lambda { HTTPStub::Stub.new(method, "http://www.yahoo.com/") }.should.not.raise(ArgumentError)
+    end
+  end
+
+  it "does not allow invalid HTTP methods" do
+    lambda { HTTPStub::Stub.new("invalid", "http://www.yahoo.com/") }.should.raise(ArgumentError)
+  end
+
   describe "#matches?" do
     it "returns true when provided an identical stub" do
-      @stub.matches?(@stub.dup).should.be.true
+      @stub.matches?(:get, "http://www.yahoo.com/").should.be.true
     end
 
     it "returns false when the URL differs" do
-      @stub.matches?(HTTPStub::Stub.new(:get, "http://www.google.com/")).should.be.false
+      @stub.matches?(:get, "http://www.google.com/").should.be.false
     end
 
     it "returns false when the method differs" do
-      @stub.matches?(HTTPStub::Stub.new(:post, "http://www.yahoo.com/")).should.be.false
+      @stub.matches?(:post, "http://www.yahoo.com/").should.be.false
     end
   end
 
@@ -31,6 +41,18 @@ describe HTTPStub::Stub do
     it "sets the response body" do
       @stub.to_return(body: "hello")
       @stub.response_body.should.be == "hello"
+    end
+
+    it "allows JSON results by passing :json with a string" do
+      @stub.to_return(json: '{"value":42}')
+      @stub.response_headers["Content-Type"].should == "application/json"
+      @stub.response_body.should == '{"value":42}'
+    end
+
+    it "allows JSON results by passing :json with a hash" do
+      @stub.to_return(json: {:value => 42})
+      @stub.response_headers["Content-Type"].should == "application/json"
+      @stub.response_body.should == '{"value":42}'
     end
 
     it "sets response headers" do

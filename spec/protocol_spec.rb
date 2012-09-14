@@ -1,6 +1,6 @@
 describe HTTPStub::Protocol do
   before do
-    HTTPStub::Protocol.registry.reset!
+    HTTPStub::Protocol.resetStubs
 
     @request = NSURLRequest.requestWithURL(NSURL.URLWithString("http://www.google.com/"))
   end
@@ -12,7 +12,7 @@ describe HTTPStub::Protocol do
       end
 
       it "returns true for stubbed requests" do
-        HTTPStub::Protocol.registry.add_stub(:get, "http://www.google.com/")
+        HTTPStub::Protocol.addStub(:get, "http://www.google.com/")
         HTTPStub::Protocol.canInitWithRequest(@request).should.be.true
       end
     end
