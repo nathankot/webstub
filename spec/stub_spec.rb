@@ -29,6 +29,42 @@ describe HTTPStub::Stub do
     it "returns false when the method differs" do
       @stub.matches?(:post, "http://www.yahoo.com/").should.be.false
     end
+
+    describe "body" do
+      describe "with a dictionary" do
+        before do
+          @stub = HTTPStub::Stub.new(:post, "http://www.yahoo.com/search").
+            with(body: { :q => "query"})
+        end
+
+        it "returns false when the body does not match" do
+          @stub.matches?(:post, "http://www.yahoo.com/search", { :body => {}}).should.be.false          
+        end
+
+        it "returns true when the body matches (with string keys)" do
+          @stub.matches?(:post, "http://www.yahoo.com/search", { :body => { "q" => "query" }}).should.be.true
+        end
+      end
+
+      describe "with a string" do
+        before do
+          @stub = HTTPStub::Stub.new(:post, "http://www.yahoo.com/search").
+            with(body: "raw body")
+        end
+
+        it "returns true when an identical body is provided" do
+          @stub.matches?(:post, "http://www.yahoo.com/search", { :body => "raw body" }).should.be.true
+        end
+
+        it "returns false when a dictionary is provided" do
+          @stub.matches?(:post, "http://www.yahoo.com/search", { :body => { "q" => "query" }}).should.be.false
+        end
+
+        it "returns false without a body" do
+          @stub.matches?(:post, "http://www.yahoo.com/search").should.be.false
+        end
+      end
+    end
   end
 
   describe "#response_body" do
