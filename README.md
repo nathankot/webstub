@@ -1,7 +1,7 @@
 WebStub
 ======
 
-What if WebMock and NSURLProtocol had a baby?
+What if WebMock and [NSURLProtocol](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/Reference/Reference.html) had a baby?
 
 Features
 ------------
@@ -9,6 +9,7 @@ Features
 * Request matching based upon HTTP method, URI, and body
 * Optionally, disable real network access
 * Familiar, delicious syntax
+* Bacon integration
 
 Examples
 ------------
