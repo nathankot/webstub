@@ -1,4 +1,4 @@
-module HTTPStub
+module WebStub
   class Registry
     def initialize()
       @stubs = []
@@ -11,7 +11,7 @@ module HTTPStub
       stub
     end
 
-    def reset!
+    def reset
       @stubs = []
     end
 

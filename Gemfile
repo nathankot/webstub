@@ -2,7 +2,9 @@ source :rubygems
 
 gem 'rake'
 
-gem 'guard-motion', :git => 'git://github.com/mordaroso/guard-motion.git'
+gem 'listen', :git => 'git://github.com/guard/listen.git'
+gem 'guard', :git => 'git://github.com/guard/guard.git'
+gem 'guard-motion'
 gem 'rb-fsevent', '~> 0.9.1'
 gem 'coolline'
 gem 'terminal-notifier-guard'

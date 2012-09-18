@@ -1,4 +1,4 @@
-module HTTPStub
+module WebStub
   module URI
     def self.decode_www_form(str)
       str.split("&").inject({}) do |hash, component|

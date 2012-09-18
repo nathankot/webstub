@@ -1,6 +1,6 @@
-describe HTTPStub::Stub do
+describe WebStub::Stub do
   before do
-    @stub = HTTPStub::Stub.new(:get, "http://www.yahoo.com/")
+    @stub = WebStub::Stub.new(:get, "http://www.yahoo.com/")
   end
 
   it "holds the method and the path" do
@@ -8,13 +8,13 @@ describe HTTPStub::Stub do
   end
 
   it "allows all valid HTTP methods" do
-    HTTPStub::Stub::METHODS.each do |method|
-      lambda { HTTPStub::Stub.new(method, "http://www.yahoo.com/") }.should.not.raise(ArgumentError)
+    WebStub::Stub::METHODS.each do |method|
+      lambda { WebStub::Stub.new(method, "http://www.yahoo.com/") }.should.not.raise(ArgumentError)
     end
   end
 
   it "does not allow invalid HTTP methods" do
-    lambda { HTTPStub::Stub.new("invalid", "http://www.yahoo.com/") }.should.raise(ArgumentError)
+    lambda { WebStub::Stub.new("invalid", "http://www.yahoo.com/") }.should.raise(ArgumentError)
   end
 
   describe "#matches?" do
@@ -33,7 +33,7 @@ describe HTTPStub::Stub do
     describe "body" do
       describe "with a dictionary" do
         before do
-          @stub = HTTPStub::Stub.new(:post, "http://www.yahoo.com/search").
+          @stub = WebStub::Stub.new(:post, "http://www.yahoo.com/search").
             with(body: { :q => "query"})
         end
 
@@ -48,7 +48,7 @@ describe HTTPStub::Stub do
 
       describe "with a string" do
         before do
-          @stub = HTTPStub::Stub.new(:post, "http://www.yahoo.com/search").
+          @stub = WebStub::Stub.new(:post, "http://www.yahoo.com/search").
             with(body: "raw body")
         end
 

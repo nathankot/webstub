@@ -1,6 +1,6 @@
-describe HTTPStub::API do
+describe WebStub::API do
   before do
-    HTTPStub::API.reset
+    WebStub::API.reset_stubs
     
     @url = "http://www.google.com/search"
     @request = NSURLRequest.requestWithURL(NSURL.URLWithString(@url))
@@ -8,11 +8,11 @@ describe HTTPStub::API do
 
   describe ".stub_request" do
     it "returns the newly added stub" do
-      HTTPStub::API.stub_request(:get, @url).should.not.be.nil
+      WebStub::API.stub_request(:get, @url).should.not.be.nil
     end
     
-    before { HTTPStub::API.disable_network_access! }
-    after  { HTTPStub::API.enable_network_access! }
+    before { WebStub::API.disable_network_access! }
+    after  { WebStub::API.enable_network_access! }
 
     describe "when a request does not match any previously set stubs" do
       describe "when no body is set" do
@@ -31,7 +31,7 @@ describe HTTPStub::API do
 
       describe "when a body is set" do
         before do
-          HTTPStub::API.stub_request(:post, @url).
+          WebStub::API.stub_request(:post, @url).
             with(body: { :q => "hi" })
 
           @response = post @url, :q => "hello"
@@ -46,7 +46,7 @@ describe HTTPStub::API do
     describe "when a request matches a stub" do
       describe "and the request does include a body" do
         before do
-          HTTPStub::API.stub_request(:get, @url).to_return(body:"hello", headers: {"Content-Type" => "text/plain"})
+          WebStub::API.stub_request(:get, @url).to_return(body:"hello", headers: {"Content-Type" => "text/plain"})
 
           @response = get @url
         end
@@ -67,7 +67,7 @@ describe HTTPStub::API do
       describe "and the request includes a body" do
         describe "of form data" do
           before do
-            HTTPStub::API.stub_request(:post, @url).
+            WebStub::API.stub_request(:post, @url).
               with(body: { q: "search" }).
               to_return(json: { results: ["result 1", "result 2"] })
 
@@ -82,7 +82,7 @@ describe HTTPStub::API do
 
       describe "with raw data" do
         before do
-          HTTPStub::API.stub_request(:post, @url).
+          WebStub::API.stub_request(:post, @url).
             with(body: "raw body").
             to_return(json: { results: ["result 1", "result 2"] })
 
@@ -96,21 +96,21 @@ describe HTTPStub::API do
     end
   end
 
-  describe ".reset" do
+  describe ".reset_stubs" do
     before do
-      HTTPStub::API.stub_request(:get, @url)
-      HTTPStub::API.reset
+      WebStub::API.stub_request(:get, @url)
+      WebStub::API.reset_stubs
     end
 
     describe "when network access is disabled" do
       before do
-        HTTPStub::API.disable_network_access!
+        WebStub::API.disable_network_access!
 
         @response = get @url
       end
 
       after do
-        HTTPStub::API.enable_network_access!
+        WebStub::API.enable_network_access!
       end
 
       it "returns a nil body" do

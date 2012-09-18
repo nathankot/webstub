@@ -1,4 +1,4 @@
-module HTTPStub
+module WebStub
   class Stub
     METHODS = ["GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS", "PATCH"].freeze
 

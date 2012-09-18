@@ -1,6 +1,6 @@
-describe HTTPStub::Registry do
+describe WebStub::Registry do
   before do
-    @registry = HTTPStub::Registry.new()
+    @registry = WebStub::Registry.new()
   end
 
   it "has no requests initially" do
@@ -14,10 +14,10 @@ describe HTTPStub::Registry do
     end
   end
 
-  describe "#reset!" do
+  describe "#reset" do
     it "removes all previously set stubs" do
       @registry.add_stub(:get, "http://www.yahoo.com")
-      @registry.reset!
+      @registry.reset
       @registry.size.should == 0
     end
   end

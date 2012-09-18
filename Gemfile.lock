@@ -1,19 +1,24 @@
 GIT
-  remote: git://github.com/mordaroso/guard-motion.git
-  revision: b6b3823b4ab7cd335f1dda4136510ffff3e4e3ec
+  remote: git://github.com/guard/guard.git
+  revision: 863fa1247e07a0659edebfede61cf16096496c36
   specs:
-    guard-motion (0.1.0)
-      guard (>= 1.1.0)
-      rake (>= 0.9)
+    guard (1.3.2)
+      listen (>= 0.4.2)
+      thor (>= 0.14.6)
+
+GIT
+  remote: git://github.com/guard/listen.git
+  revision: edff3eb1dfca5e7864460ece2322e85097fb0209
+  specs:
+    listen (0.5.0)
 
 GEM
   remote: http://rubygems.org/
   specs:
     coolline (0.3.0)
-    guard (1.3.2)
-      listen (>= 0.4.2)
-      thor (>= 0.14.6)
-    listen (0.5.0)
+    guard-motion (0.1.0)
+      guard (>= 1.1.0)
+      rake (>= 0.9)
     rake (0.9.2.2)
     rb-fsevent (0.9.1)
     terminal-notifier-guard (1.5.3)
@@ -24,7 +29,9 @@ PLATFORMS
 
 DEPENDENCIES
   coolline
-  guard-motion!
+  guard!
+  guard-motion
+  listen!
   rake
   rb-fsevent (~> 0.9.1)
   terminal-notifier-guard

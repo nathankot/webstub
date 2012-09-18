@@ -1,4 +1,4 @@
-module HTTPStub
+module WebStub
   module JSON
     def self.generate(hash)
       error = Pointer.new(:object)
