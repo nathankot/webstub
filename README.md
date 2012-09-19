@@ -34,7 +34,7 @@ Currently, WebStub reopens `Bacon::Context` to add the following methods:
 
 Note that it does **not** call `reset_stubs` after each spec for you! You'll want to do this at the outermost `describe` block.
 
-If someone has a patch or away to do this, please get in touch with me.
+If someone has a patch or a way to do this, please get in touch with me.
 
 Examples
 ------------
