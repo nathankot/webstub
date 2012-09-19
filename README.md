@@ -1,7 +1,7 @@
-WebStub
+WebStub [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/mattgreen/webstub)
 ======
 
-What if WebMock and [NSURLProtocol](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/Reference/Reference.html) had a baby?
+What if [WebMock](https://github.com/bblimke/webmock) and [NSURLProtocol](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/Reference/Reference.html) had a baby?
 
 Features
 ------------
@@ -10,6 +10,31 @@ Features
 * Optionally, disable real network access
 * Familiar, delicious syntax
 * Bacon integration
+
+Installation
+------------
+If you haven't done so already, please [configure](http://thunderboltlabs.com/posts/using-bundler-with-rubymotion) your project to use Bundler.
+
+Update your Gemfile:
+
+    gem "webstub", "~> 0.3.0"
+
+Bundle:
+
+    bundle install
+
+Usage
+-----
+Currently, WebStub reopens `Bacon::Context` to add the following methods:
+
+* `disable_network_access!`
+* `enable_network_access!`
+* `stub_request`
+* `reset_stubs`
+
+Note that it does **not** call `reset_stubs` after each spec for you! You'll want to do this at the outermost `describe` block.
+
+If someone has a patch or away to do this, please get in touch with me.
 
 Examples
 ------------
