@@ -13,7 +13,11 @@ Features
 
 Installation
 ------------
-If you haven't done so already, please [configure](http://thunderboltlabs.com/posts/using-bundler-with-rubymotion) your project to use Bundler.
+Please ensure you have the latest version of RubyMotion: (**WebStub requres version 1.24 or higher**)
+
+    $ sudo motion update
+
+Also, if you haven't done so already, please [configure](http://thunderboltlabs.com/posts/using-bundler-with-rubymotion) your project to use Bundler.
 
 Update your Gemfile:
 
@@ -21,30 +25,32 @@ Update your Gemfile:
 
 Bundle:
 
-    bundle install
+    $ bundle install
 
 Usage
 -----
-Currently, WebStub reopens `Bacon::Context` to add the following methods:
+* Add the following line to the top-most `describe` block in your spec:
 
-* `disable_network_access!`
-* `enable_network_access!`
-* `stub_request`
-* `reset_stubs`
+    `extend WebStub::SpecHelpers`
 
-Note that it does **not** call `reset_stubs` after each spec for you! You'll want to do this at the outermost `describe` block.
+* Use the following methods to control the use of request stubbing:
+  - `disable_network_access!`
+  - `enable_network_access!`
+  - `stub_request`
+  - `reset_stubs`
 
-If someone has a patch or a way to do this, please get in touch with me.
-
-Examples
+Example Spec
 ------------
 
-Stubbing a GET request with a body and a content type:
+```ruby
+describe "Example" do
+  extend WebStub::SpecHelpers
 
+  describe "Stubbing a GET request to return a simple response" do
     it "retrieves the front page" do
       stub_request(:get, "http://example.com/").
         to_return(body: "Hello!", content_type: "text/plain")
-      
+
       @body = nil
       @api.get_index do |body, error|
         @body = body
@@ -55,9 +61,9 @@ Stubbing a GET request with a body and a content type:
         @body.should.be == "Hello!"
       end
     end
+  end
 
-Stubbing a GET request to return JSON:
-
+  describe "Stubbing a GET request to return JSON" do
     it "retrieves suggestions" do
       stub_request(:get, "https://example.com/suggestions?q=mu").
         to_return(json: { suggestions: ["muse"] })
@@ -72,9 +78,9 @@ Stubbing a GET request to return JSON:
         @suggestions.should.not.be.empty
       end
     end
+  end
 
-Stubbing a POST request to return JSON:
-
+  describe "Stubbing a POST request to return JSON" do
     it "handles a POST request" do
       stub_request(:post, "https://example.com/action").
         with(body: { q: "unsustainable" }).
@@ -86,10 +92,13 @@ Stubbing a POST request to return JSON:
         resume
       end
 
-     wait_max 1.0 do
-       @results.should.not.be.empty
-     end
+      wait_max 1.0 do
+        @results.should.not.be.empty
+      end
     end
+  end
+end
+```
 
 Conventions
 -----------------
