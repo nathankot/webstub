@@ -44,7 +44,7 @@ module WebStub
       end
 
       response = NSHTTPURLResponse.alloc.initWithURL(request.URL,
-                                                     statusCode:200,
+                                                     statusCode:stub.response_status_code,
                                                      HTTPVersion:"HTTP/1.1",
                                                      headerFields:stub.response_headers)
 

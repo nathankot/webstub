@@ -95,5 +95,10 @@ describe WebStub::Stub do
       @stub.to_return(body: "{}", headers: { "Content-Type" => "application/json" })
       @stub.response_headers.should.be == { "Content-Type" => "application/json" } 
     end
+
+    it "sets the response status code" do
+      @stub.to_return(body: "{}", status_code: 400)
+      @stub.response_status_code.should.be == 400
+    end
   end
 end

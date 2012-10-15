@@ -3,11 +3,13 @@ class Response
     @body = body ? NSString.alloc.initWithData(body, encoding:NSUTF8StringEncoding) : nil
     @headers = response ? response.allHeaderFields : nil
     @error = error
+    @status_code = response ? response.statusCode : nil
   end
 
   attr_reader :body
   attr_reader :headers
   attr_reader :error
+  attr_reader :status_code
 end
 
 def get(url)

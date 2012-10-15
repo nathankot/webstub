@@ -34,8 +34,11 @@ module WebStub
 
     attr_reader :response_body
     attr_reader :response_headers
+    attr_reader :response_status_code
 
     def to_return(options)
+      @response_status_code = options[:status_code] || 200
+
       if json = options[:json]
         @response_body = json
         @response_headers["Content-Type"] = "application/json"
