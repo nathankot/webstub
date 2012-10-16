@@ -62,6 +62,10 @@ describe WebStub::API do
         it "returns a nil error" do
           @response.error.should.be.nil
         end
+
+        it "returns a 200 status code" do
+          @response.status_code.should.be == 200
+        end
       end
 
       describe "and the request includes a body" do
@@ -93,6 +97,19 @@ describe WebStub::API do
           @response.body.should == '{"results":["result 1","result 2"]}'
         end
       end
+    end
+  end
+
+  describe "when a stub sets a specified status code" do
+    before do
+      WebStub::API.stub_request(:get, @url).
+        to_return(json: {error: "Not Found"}, status_code: 400)
+      
+      @response = get @url
+    end
+
+    it "the status code of the response should match" do
+      @response.status_code.should.be == 400
     end
   end
 
