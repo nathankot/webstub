@@ -107,7 +107,7 @@ Conventions
   - Hashes are assumed to be form data (with a `application/x-www-form-urlencoded` content type)
   - Strings are matched as is
 - The `to_return` method accepts a few options:
-  - `json`: accepts either a Hash or a String. If a Hash is provided, it will be converted to JSON. Strings are returned as is, with the Content-Type set to `application/json`.
+  - `json`: accepts either a Hash, Array or a String. If a Hash or Array is provided, it will be converted to JSON. Strings are returned as is, with the Content-Type set to `application/json`.
   - `body`: accepts a String, and returns it as-is
   - `content_type`: sets the Content-Type when using the `body` parameter
   - `status_code`: sets the integer Status Code of the response. Defaults to `200`.
