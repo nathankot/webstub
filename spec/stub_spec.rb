@@ -91,6 +91,12 @@ describe WebStub::Stub do
       @stub.response_body.should == '{"value":42}'
     end
 
+    it "allows JSON results by passing :json with an array" do
+      @stub.to_return(json: [{:value => 42}])
+      @stub.response_headers["Content-Type"].should == "application/json"
+      @stub.response_body.should == '[{"value":42}]'
+    end
+
     it "sets response headers" do
       @stub.to_return(body: "{}", headers: { "Content-Type" => "application/json" })
       @stub.response_headers.should.be == { "Content-Type" => "application/json" } 
