@@ -43,7 +43,7 @@ module WebStub
         @response_body = json
         @response_headers["Content-Type"] = "application/json"
 
-        if @response_body.is_a? Hash
+        if @response_body.is_a?(Hash) || @response_body.is_a?(Array)
           @response_body = JSON.generate(@response_body)
         end
       else
