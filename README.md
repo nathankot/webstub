@@ -46,10 +46,10 @@ Example Spec
 describe "Example" do
   extend WebStub::SpecHelpers
 
-  describe "Stubbing a GET request to return a simple response" do
+  describe "Stubbing a GET request to return a simple response after a delay" do
     it "retrieves the front page" do
       stub_request(:get, "http://example.com/").
-        to_return(body: "Hello!", content_type: "text/plain")
+        to_return(body: "Hello!", content_type: "text/plain", delay: 0.3)
 
       @body = nil
       @api.get_index do |body, error|

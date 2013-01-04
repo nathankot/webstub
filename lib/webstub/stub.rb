@@ -11,6 +11,7 @@ module WebStub
       @request_body = nil
 
       @response_body = ""
+      @response_delay = 0.0
       @response_headers = {}
     end
 
@@ -33,6 +34,7 @@ module WebStub
     end
 
     attr_reader :response_body
+    attr_reader :response_delay
     attr_reader :response_headers
     attr_reader :response_status_code
 
@@ -53,6 +55,10 @@ module WebStub
         if content_type = options[:content_type]
           @response_headers["Content-Type"] = content_type
         end
+      end
+
+      if delay = options[:delay]
+        @response_delay = delay
       end
 
       self

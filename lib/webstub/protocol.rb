@@ -48,9 +48,11 @@ module WebStub
                                                      HTTPVersion:"HTTP/1.1",
                                                      headerFields:stub.response_headers)
 
-      client.URLProtocol(self, didReceiveResponse:response, cacheStoragePolicy:NSURLCacheStorageNotAllowed)
-      client.URLProtocol(self, didLoadData:stub.response_body.dataUsingEncoding(NSUTF8StringEncoding))
-      client.URLProtocolDidFinishLoading(self)
+      Dispatch::Queue.concurrent("webstub.response").after(stub.response_delay) do
+        client.URLProtocol(self, didReceiveResponse:response, cacheStoragePolicy:NSURLCacheStorageNotAllowed)
+        client.URLProtocol(self, didLoadData:stub.response_body.dataUsingEncoding(NSUTF8StringEncoding))
+        client.URLProtocolDidFinishLoading(self)
+      end
     end
 
     def stopLoading

@@ -98,18 +98,33 @@ describe WebStub::API do
         end
       end
     end
-  end
 
-  describe "when a stub sets a specified status code" do
-    before do
-      WebStub::API.stub_request(:get, @url).
-        to_return(json: {error: "Not Found"}, status_code: 400)
-      
-      @response = get @url
+    describe "when a stub sets a specified status code" do
+      before do
+        WebStub::API.stub_request(:get, @url).
+          to_return(json: {error: "Not Found"}, status_code: 400)
+
+        @response = get @url
+      end
+
+      it "the status code of the response should match" do
+        @response.status_code.should.be == 400
+      end
     end
 
-    it "the status code of the response should match" do
-      @response.status_code.should.be == 400
+    describe "when a stub sets a delay" do
+      before do
+        WebStub::API.stub_request(:get, @url).
+          to_return(json: {}, delay: 1.0)
+      end
+
+      it "returns a response after the specified amount of time" do
+        start = Time.now
+        get @url
+        finish = Time.now
+
+        (finish - start).should.be >= 1.0
+      end
     end
   end
 

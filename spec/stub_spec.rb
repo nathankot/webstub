@@ -97,6 +97,11 @@ describe WebStub::Stub do
       @stub.response_body.should == '[{"value":42}]'
     end
 
+    it "sets a delay time" do
+      @stub.to_return(body: "{}", delay: 0.5)
+      @stub.response_delay.should == 0.5
+    end
+
     it "sets response headers" do
       @stub.to_return(body: "{}", headers: { "Content-Type" => "application/json" })
       @stub.response_headers.should.be == { "Content-Type" => "application/json" } 
