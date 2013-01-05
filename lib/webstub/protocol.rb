@@ -32,30 +32,44 @@ module WebStub
       registry.reset
     end
 
+    def initWithRequest(request, cachedResponse:response, client: client)
+      if super
+        @stub = nil
+        @timer = nil
+      end
+
+      self
+    end
+
+    def completeLoading
+      response = NSHTTPURLResponse.alloc.initWithURL(request.URL,
+                                                     statusCode:@stub.response_status_code,
+                                                     HTTPVersion:"HTTP/1.1",
+                                                     headerFields:@stub.response_headers)
+
+      client.URLProtocol(self, didReceiveResponse:response, cacheStoragePolicy:NSURLCacheStorageNotAllowed)
+      client.URLProtocol(self, didLoadData:@stub.response_body.dataUsingEncoding(NSUTF8StringEncoding))
+      client.URLProtocolDidFinishLoading(self)
+    end
+
     def startLoading
       request = self.request
       client = self.client
     
-      unless stub = self.class.stub_for(request)
+      unless @stub = self.class.stub_for(self.request)
         error = NSError.errorWithDomain("WebStub", code:0, userInfo:{ NSLocalizedDescriptionKey: "network access is not permitted!"})
         client.URLProtocol(self, didFailWithError:error)
 
         return
       end
 
-      response = NSHTTPURLResponse.alloc.initWithURL(request.URL,
-                                                     statusCode:stub.response_status_code,
-                                                     HTTPVersion:"HTTP/1.1",
-                                                     headerFields:stub.response_headers)
-
-      Dispatch::Queue.concurrent("webstub.response").after(stub.response_delay) do
-        client.URLProtocol(self, didReceiveResponse:response, cacheStoragePolicy:NSURLCacheStorageNotAllowed)
-        client.URLProtocol(self, didLoadData:stub.response_body.dataUsingEncoding(NSUTF8StringEncoding))
-        client.URLProtocolDidFinishLoading(self)
-      end
+      @timer = NSTimer.scheduledTimerWithTimeInterval(@stub.response_delay, target:self, selector: :completeLoading, userInfo:nil, repeats:false)
     end
 
     def stopLoading
+      if @timer
+        @timer.invalidate
+      end
     end
 
   private
