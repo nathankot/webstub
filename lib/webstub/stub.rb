@@ -24,6 +24,16 @@ module WebStub
         return false
       end
 
+      if @request_headers
+        headers = options[:headers] || {}
+
+        @request_headers.each do |key, value|
+          if headers[key] != value
+            return false
+          end
+        end
+      end
+
       if @request_body
         if @request_body != options[:body]
           return false
@@ -71,6 +81,10 @@ module WebStub
         if @request_body.is_a?(Hash)
           @request_body = @request_body.inject({}) { |h, (k,v)| h[k.to_s] = v; h }
         end
+      end
+
+      if headers = options[:headers]
+        @request_headers = headers
       end
 
       self

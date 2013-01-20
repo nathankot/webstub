@@ -65,6 +65,23 @@ describe WebStub::Stub do
         end
       end
     end
+
+    describe "headers" do
+      before do
+        @stub = WebStub::Stub.new(:get, "http://www.yahoo.com/search").
+          with(headers: { "Authorization" => "secret" })
+      end
+
+      it "returns true when the headers are included" do
+        @stub.matches?(:get, "http://www.yahoo.com/search", 
+                       headers: { "X-Extra" => "42", "Authorization" => "secret" }).should.be.true
+      end
+
+      it "returns false when any of the headers are absent" do
+        @stub.matches?(:get, "http://www.yahoo.com/search", 
+                       headers: { "X-Extra" => "42" }).should.be.false
+      end
+    end
   end
 
   describe "#response_body" do
