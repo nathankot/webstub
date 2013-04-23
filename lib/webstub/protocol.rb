@@ -5,6 +5,8 @@ module WebStub
     end
 
     def self.canInitWithRequest(request)
+      return false if RUBYMOTION_ENV != 'test'
+
       if stub_for(request)
         return true
       end
