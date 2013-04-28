@@ -5,7 +5,8 @@ module WebStub
     end
 
     def self.canInitWithRequest(request)
-      return false unless RUBYMOTION_ENV == 'test'
+      return false unless spec_mode?
+      return false unless supported?(request)
 
       if stub_for(request)
         return true
@@ -107,6 +108,17 @@ module WebStub
       else
         body
       end
+    end
+
+    def self.spec_mode?
+      RUBYMOTION_ENV == 'test'
+    end
+
+    def self.supported?(request)
+      return false unless request.URL
+      return false unless request.URL.scheme.start_with?("http")
+
+      true
     end
   end
 end
