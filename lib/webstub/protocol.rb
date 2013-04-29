@@ -83,14 +83,16 @@ module WebStub
 
     def self.stub_for(request)
       options = {}
-      if request.HTTPBody
-        options[:body] = parse_body(request)
+      if body = parse_body(request)
+        options[:body] = body
       end
 
       registry.stub_matching(request.HTTPMethod, request.URL.absoluteString, options)
     end
 
     def self.parse_body(request)
+      return nil unless request.HTTPBody
+
       content_type = nil
 
       request.allHTTPHeaderFields.each do |key, value|
@@ -101,6 +103,7 @@ module WebStub
       end
 
       body = NSString.alloc.initWithData(request.HTTPBody, encoding:NSUTF8StringEncoding)
+      return nil unless body
 
       case content_type
       when /application\/x-www-form-urlencoded/
