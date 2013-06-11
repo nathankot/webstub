@@ -12,8 +12,13 @@ class Response
   attr_reader :status_code
 end
 
-def get(url)
-  request = NSURLRequest.requestWithURL(NSURL.URLWithString(url))
+def get(url, headers={})
+  request = NSMutableURLRequest.alloc.init
+  request.URL = NSURL.URLWithString(url)
+
+  headers.each do |key, value|
+    request.setValue(value, forHTTPHeaderField: key.to_s)
+  end
 
   response = Pointer.new(:object)
   error = Pointer.new(:object)

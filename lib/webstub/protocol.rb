@@ -82,7 +82,7 @@ module WebStub
     end
 
     def self.stub_for(request)
-      options = {}
+      options = { headers: request.allHTTPHeaderFields }
       if body = parse_body(request)
         options[:body] = body
       end

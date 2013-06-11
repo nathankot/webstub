@@ -41,6 +41,19 @@ describe WebStub::API do
           @response.body.should.be.nil
         end
       end
+
+      describe "when a header is set" do
+        before do
+          WebStub::API.stub_request(:get, @url).
+            with(headers: { "Header" => "Value" })
+
+          @response = get(@url)
+        end
+
+        it "requires the header to be present" do
+          @response.error.should.not.be.nil
+        end
+      end
     end
 
     describe "when a request matches a stub" do
@@ -124,6 +137,20 @@ describe WebStub::API do
         finish = Time.now
 
         (finish - start).should.be >= 1.0
+      end
+    end
+
+    describe "when a stub requires a header" do
+      before do
+        WebStub::API.stub_request(:get, @url).
+          with(headers: { "My-Header" => "123" }).
+          to_return(json: {})
+      end
+
+      it "returns the correct body" do
+        response = get(@url, { "My-Header" => "123" })
+
+        response.body.should == '{}'
       end
     end
   end

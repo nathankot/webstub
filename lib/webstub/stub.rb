@@ -13,6 +13,7 @@ module WebStub
       @response_body = ""
       @response_delay = 0.0
       @response_headers = {}
+      @response_status_code = 200
     end
 
     def matches?(method, url, options={})
@@ -49,7 +50,9 @@ module WebStub
     attr_reader :response_status_code
 
     def to_return(options)
-      @response_status_code = options[:status_code] || 200
+      if status_code = options[:status_code]
+        @response_status_code = status_code
+      end
 
       if json = options[:json]
         @response_body = json
