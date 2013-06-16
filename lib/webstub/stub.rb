@@ -5,6 +5,8 @@ module WebStub
     def initialize(method, url)
       @request_method = canonicalize_method(method)
       raise ArgumentError, "invalid method name" unless METHODS.include? @request_method
+
+      @requests = 0
       
       @request_url = canonicalize_url(url)
       @request_headers = nil
@@ -42,6 +44,12 @@ module WebStub
       end
 
       true
+    end
+
+    attr_accessor :requests
+
+    def requested?
+      @requests > 0
     end
 
     attr_reader :response_body

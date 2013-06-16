@@ -66,6 +66,8 @@ module WebStub
         return
       end
 
+      @stub.requests += 1
+
       @timer = NSTimer.scheduledTimerWithTimeInterval(@stub.response_delay, target:self, selector: :completeLoading, userInfo:nil, repeats:false)
     end
 

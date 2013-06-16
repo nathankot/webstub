@@ -84,6 +84,24 @@ describe WebStub::Stub do
     end
   end
 
+  describe "#requested?" do
+    describe "by default" do
+      it "returns false" do
+        @stub.should.not.be.requested
+      end
+    end
+
+    describe "after incrementing the request count" do
+      before do
+        @stub.requests += 1
+      end
+
+      it "returns true" do
+        @stub.should.be.requested
+      end
+    end
+  end
+
   describe "#response_body" do
     it "returns the response body" do
       @stub.response_body.should == "" 

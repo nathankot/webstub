@@ -59,7 +59,7 @@ describe WebStub::API do
     describe "when a request matches a stub" do
       describe "and the request does include a body" do
         before do
-          WebStub::API.stub_request(:get, @url).to_return(body:"hello", headers: {"Content-Type" => "text/plain"})
+          @stub = WebStub::API.stub_request(:get, @url).to_return(body:"hello", headers: {"Content-Type" => "text/plain"})
 
           @response = get @url
         end
@@ -78,6 +78,10 @@ describe WebStub::API do
 
         it "returns a 200 status code" do
           @response.status_code.should.be == 200
+        end
+
+        it "marks the stub as requested" do
+          @stub.should.be.requested
         end
       end
 
