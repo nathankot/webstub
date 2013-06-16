@@ -125,5 +125,3 @@ module WebStub
     end
   end
 end
-
-NSURLProtocol.registerClass(WebStub::Protocol)
