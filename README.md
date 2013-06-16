@@ -1,4 +1,4 @@
-WebStub [![Code Climate](https://codeclimate.com/github/mattgreen/webstub.png)](https://codeclimate.com/github/mattgreen/webstub) [![Travis](https://api.travis-ci.org/mattgreen/webstub.png)](https://travis-ci.org/mattgreen/webstub)
+WebStub [![Code Climate](https://codeclimate.com/github/mattgreen/webstub.png)](https://codeclimate.com/github/mattgreen/webstub) [![Travis](https://api.travis-ci.org/mattgreen/webstub.png)](https://travis-ci.org/mattgreen/webstub) [![Gem Version](https://badge.fury.io/rb/webstub.png)](http://badge.fury.io/rb/webstub)
 ======
 
 What if [WebMock](https://github.com/bblimke/webmock) and [NSURLProtocol](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/Reference/Reference.html) had a baby?
@@ -13,15 +13,9 @@ Features
 
 Installation
 ------------
-Please ensure you have the latest version of RubyMotion: (**WebStub requres version 1.24 or higher**)
-
-    $ sudo motion update
-
-Also, if you haven't done so already, please [configure](http://thunderboltlabs.com/posts/using-bundler-with-rubymotion) your project to use Bundler.
-
 Update your Gemfile:
 
-    gem "webstub", "~> 0.3.0"
+    gem "webstub", "~> 0.4.0"
 
 Bundle:
 
@@ -111,6 +105,26 @@ Conventions
   - `body`: accepts a String, and returns it as-is
   - `content_type`: sets the Content-Type when using the `body` parameter
   - `status_code`: sets the integer Status Code of the response. Defaults to `200`.
+
+Expectations
+-----------------
+Sometimes, you may just want to check that the request has been made to a given URL. In this case, you can use the `requested?` method of the stub returned by `stub_request`:
+
+```ruby
+describe Elevate::HTTP do
+  extend WebStub::SpecHelpers
+
+  describe ".get" do
+    it "synchronously issues a HTTP GET request" do
+      stub = stub_request(:get, "http://www.example.com/")
+
+      Elevate::HTTP.get("http://www.example.com/")
+
+      stub.should.be.requested
+    end
+  end
+end
+```
 
 TODO
 ---------
