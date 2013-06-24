@@ -1,6 +1,7 @@
 .rvmrc
 .repl_history
 build
+pkg
 resources/*.nib
 resources/*.momd
 resources/*.storyboardc
