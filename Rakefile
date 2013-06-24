@@ -12,10 +12,12 @@ rescue LoadError
 end
 
 require 'bundler/setup'
-require 'bundler/gem_tasks'
 
 Bundler.setup
 Bundler.require
+
+require 'rubygems/tasks'
+Gem::Tasks.new
 
 Motion::Project::App.setup do |app|
   gemspec = Dir.glob(File.join(File.dirname(__FILE__), "*.gemspec")).first
