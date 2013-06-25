@@ -2,7 +2,7 @@ describe WebStub::API do
   before do
     WebStub::API.reset_stubs
     
-    @url = "http://www.google.com/search"
+    @url = "http://www.example.com/"
     @request = NSURLRequest.requestWithURL(NSURL.URLWithString(@url))
   end
 
