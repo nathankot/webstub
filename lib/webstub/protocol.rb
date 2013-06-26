@@ -49,6 +49,24 @@ module WebStub
                                                      statusCode:@stub.response_status_code,
                                                      HTTPVersion:"HTTP/1.1",
                                                      headerFields:@stub.response_headers)
+      @stub.requests += 1
+
+      if @stub.redirects?
+        url = NSURL.URLWithString(@stub.response_headers["Location"])
+        redirect_request = NSURLRequest.requestWithURL(url)
+
+        client.URLProtocol(self, wasRedirectedToRequest: redirect_request, redirectResponse: response)
+
+        unless @stub = self.class.stub_for(redirect_request)
+          error = NSError.errorWithDomain("WebStub", code:0, userInfo:{ NSLocalizedDescriptionKey: "network access is not permitted!"})
+          client.URLProtocol(self, didFailWithError:error)
+
+          return
+        end
+
+        @timer = NSTimer.scheduledTimerWithTimeInterval(@stub.response_delay, target:self, selector: :completeLoading, userInfo:nil, repeats:false)
+        return
+      end
 
       client.URLProtocol(self, didReceiveResponse:response, cacheStoragePolicy:NSURLCacheStorageNotAllowed)
       client.URLProtocol(self, didLoadData:@stub.response_body.dataUsingEncoding(NSUTF8StringEncoding))
@@ -65,8 +83,6 @@ module WebStub
 
         return
       end
-
-      @stub.requests += 1
 
       @timer = NSTimer.scheduledTimerWithTimeInterval(@stub.response_delay, target:self, selector: :completeLoading, userInfo:nil, repeats:false)
     end

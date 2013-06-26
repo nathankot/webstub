@@ -157,6 +157,21 @@ describe WebStub::API do
         response.body.should == '{}'
       end
     end
+
+    describe "when a stub redirects" do
+      it "redirects the request" do
+        @redirect_url = @url + "redirect"
+
+        WebStub::API.stub_request(:get, @url).
+          to_redirect(url: @redirect_url)
+        WebStub::API.stub_request(:get, @redirect_url).
+          to_return(json: {})
+
+        response = get(@url)
+
+        response.body.should == '{}'
+      end
+    end
   end
 
   describe ".reset_stubs" do

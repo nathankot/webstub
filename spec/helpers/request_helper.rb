@@ -20,11 +20,7 @@ def get(url, headers={})
     request.setValue(value, forHTTPHeaderField: key.to_s)
   end
 
-  response = Pointer.new(:object)
-  error = Pointer.new(:object)
-  body = NSURLConnection.sendSynchronousRequest(request, returningResponse:response, error:error)
-
-  Response.new(body, response[0], error[0])
+  issue_request(request)
 end
 
 def post(url, body)
@@ -44,10 +40,25 @@ def post(url, body)
 
   request.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding)
 
-  response = Pointer.new(:object)
-  error = Pointer.new(:object)
-  body = NSURLConnection.sendSynchronousRequest(request, returningResponse:response, error:error)
-
-  Response.new(body, response[0], error[0])
+  issue_request(request)
 end
 
+def issue_request(request)
+  result = {}
+  queue = NSOperationQueue.alloc.init
+  lock = NSConditionLock.alloc.initWithCondition(0)
+
+  NSURLConnection.sendAsynchronousRequest(request,
+                                          queue: queue,
+                                          completionHandler: lambda do |response, data, error|
+                                            lock.lockWhenCondition(0)
+                                            result[:data] = data
+                                            result[:response] = response
+                                            result[:error] = error
+                                            lock.unlockWithCondition(1)
+                                          end)
+
+  lock.lockWhenCondition(1)
+
+  Response.new(result[:data], result[:response], result[:error])
+end

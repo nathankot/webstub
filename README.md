@@ -105,6 +105,9 @@ Conventions
   - `body`: accepts a String, and returns it as-is
   - `content_type`: sets the Content-Type when using the `body` parameter
   - `status_code`: sets the integer Status Code of the response. Defaults to `200`.
+- The `to_redirect` method accepts:
+  - `url`: String of the URL to redirect to (*required*)
+  - All options supported by `to_return` except for `status_code`
 
 Expectations
 -----------------

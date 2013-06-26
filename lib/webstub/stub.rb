@@ -48,6 +48,10 @@ module WebStub
 
     attr_accessor :requests
 
+    def redirects?
+      @response_status_code.between?(300, 399) && @response_headers["Location"] != nil
+    end
+
     def requested?
       @requests > 0
     end
@@ -62,6 +66,10 @@ module WebStub
         @response_status_code = status_code
       end
 
+      if headers = options[:headers]
+        @response_headers.merge!(headers)
+      end
+
       if json = options[:json]
         @response_body = json
         @response_headers["Content-Type"] = "application/json"
@@ -71,7 +79,6 @@ module WebStub
         end
       else
         @response_body = options[:body] || ""
-        @response_headers = options[:headers] || {}
 
         if content_type = options[:content_type]
           @response_headers["Content-Type"] = content_type
@@ -83,6 +90,18 @@ module WebStub
       end
 
       self
+    end
+
+    def to_redirect(options)
+      unless url = options.delete(:url)
+        raise ArgumentError, "to_redirect requires the :url option"
+      end
+
+      options[:headers] ||= {}
+      options[:headers]["Location"] = url
+      options[:status_code] = 301
+
+      to_return(options)
     end
 
     def with(options)

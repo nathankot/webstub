@@ -108,6 +108,28 @@ describe WebStub::Stub do
     end
   end
 
+  describe "#to_redirect" do
+    it "requires the :url option" do
+      lambda { @stub.to_redirect }.should.raise(ArgumentError)
+    end
+
+    it "sets the Location header to the specified URL" do
+      @stub.to_redirect(url: "http://example.org/")
+
+      @stub.response_headers.should.include("Location")
+    end
+
+    it "sets the status code to 301" do
+      @stub.to_redirect(url: "http://example.org/")
+
+      @stub.response_status_code.should == 301
+    end
+
+    it "returns the stub" do
+      @stub.to_redirect(url: "http://example.org/").should == @stub
+    end
+  end
+
   describe "#to_return" do
     it "sets the response body" do
       @stub.to_return(body: "hello")
