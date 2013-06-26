@@ -15,7 +15,7 @@ Installation
 ------------
 Update your Gemfile:
 
-    gem "webstub", "~> 0.4.0"
+    gem "webstub"
 
 Bundle:
 
