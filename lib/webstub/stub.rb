@@ -71,7 +71,7 @@ module WebStub
       if error = options.delete(:error)
         @response_error = error
       elsif code = options.delete(:code)
-        @response_error = NSError.errorWithDomain(NSURLError, code: code, userInfo: nil)
+        @response_error = NSError.errorWithDomain(NSURLErrorDomain, code: code, userInfo: nil)
       else
         raise ArgumentError, "to_fail requires either the code or error option" 
       end

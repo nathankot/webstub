@@ -136,7 +136,7 @@ describe WebStub::Stub do
     it "builds an NSError using the option specified by code" do
       @stub.to_fail(code: NSURLErrorUnsupportedURL)
 
-      @stub.response_error.domain.should == NSURLError
+      @stub.response_error.domain.should == NSURLErrorDomain
       @stub.response_error.code.should == NSURLErrorUnsupportedURL
     end
 
