@@ -172,6 +172,17 @@ describe WebStub::API do
         response.body.should == '{}'
       end
     end
+
+    describe "when a stub is configured to fail" do
+      it "fails the request" do
+        WebStub::API.stub_request(:get, @url).
+          to_fail(code: NSURLErrorNetworkConnectionLost)
+
+        response = get(@url)
+
+        response.error.code.should == NSURLErrorNetworkConnectionLost
+      end
+    end
   end
 
   describe ".reset_stubs" do

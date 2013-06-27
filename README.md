@@ -91,6 +91,23 @@ describe "Example" do
       end
     end
   end
+
+  describe "Stubbing a GET request to fail" do
+    it "returns an NSError with the NSURLError domain" do
+      stub_request(:get, "https://example.com/action").
+        to_fail(code: NSURLErrorNotConnectedToInternet)
+
+      @error = nil
+      @api.get_albums do |results, error|
+        @error = error
+        resume
+      end
+
+      wait_max 1.0 do
+        @error.code.should == NSURLErrorNotConnectedToInternet
+      end
+    end
+  end
 end
 ```
 
@@ -108,6 +125,9 @@ Conventions
 - The `to_redirect` method accepts:
   - `url`: String of the URL to redirect to (*required*)
   - All options supported by `to_return` except for `status_code`
+- The `to_fail` method accepts one of the following options:
+  - `code`: `NSURLErrorDomain` [error code](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Miscellaneous/Foundation_Constants/Reference/reference.html)
+  - `error`: `NSError` to fail the request with
 
 Expectations
 -----------------

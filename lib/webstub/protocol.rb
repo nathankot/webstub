@@ -51,6 +51,11 @@ module WebStub
                                                      headerFields:@stub.response_headers)
       @stub.requests += 1
 
+      if @stub.error?
+        client.URLProtocol(self, didFailWithError: @stub.response_error)
+        return
+      end
+
       if @stub.redirects?
         url = NSURL.URLWithString(@stub.response_headers["Location"])
         redirect_request = NSURLRequest.requestWithURL(url)

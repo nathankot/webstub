@@ -14,8 +14,13 @@ module WebStub
 
       @response_body = ""
       @response_delay = 0.0
+      @response_error = nil
       @response_headers = {}
       @response_status_code = 200
+    end
+
+    def error?
+      ! @response_error.nil?
     end
 
     def matches?(method, url, options={})
@@ -58,8 +63,21 @@ module WebStub
 
     attr_reader :response_body
     attr_reader :response_delay
+    attr_reader :response_error
     attr_reader :response_headers
     attr_reader :response_status_code
+
+    def to_fail(options)
+      if error = options.delete(:error)
+        @response_error = error
+      elsif code = options.delete(:code)
+        @response_error = NSError.errorWithDomain(NSURLError, code: code, userInfo: nil)
+      else
+        raise ArgumentError, "to_fail requires either the code or error option" 
+      end
+
+      self
+    end
 
     def to_return(options)
       if status_code = options[:status_code]

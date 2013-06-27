@@ -13,4 +13,7 @@ Gem::Specification.new do |gem|
   gem.name          = "webstub"
   gem.require_paths = ["lib"]
   gem.version       = WebStub::VERSION
+
+  gem.add_development_dependency "rake"
+  gem.add_development_dependency "rubygems-tasks"
 end

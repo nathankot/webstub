@@ -17,6 +17,26 @@ describe WebStub::Stub do
     lambda { WebStub::Stub.new("invalid", "http://www.yahoo.com/") }.should.raise(ArgumentError)
   end
 
+  it "does not have a response error by default" do
+    @stub.response_error.should.be.nil
+  end
+
+  describe "#error?" do
+    describe "by default" do
+      it "returns false" do
+        @stub.error?.should.be.false
+      end
+    end
+
+    describe "after calling to_fail" do
+      it "returns true" do
+        @stub.to_fail(code: NSURLErrorUnsupportedURL)
+
+        @stub.error?.should.be.true
+      end
+    end
+  end
+
   describe "#matches?" do
     it "returns true when provided an identical stub" do
       @stub.matches?(:get, "http://www.yahoo.com/").should.be.true
@@ -105,6 +125,30 @@ describe WebStub::Stub do
   describe "#response_body" do
     it "returns the response body" do
       @stub.response_body.should == "" 
+    end
+  end
+
+  describe "#to_fail" do
+    it "rejects an empty options Hash" do
+      lambda { @stub.to_fail({}) }.should.raise(ArgumentError)
+    end
+
+    it "builds an NSError using the option specified by code" do
+      @stub.to_fail(code: NSURLErrorUnsupportedURL)
+
+      @stub.response_error.domain.should == NSURLError
+      @stub.response_error.code.should == NSURLErrorUnsupportedURL
+    end
+
+    it "accepts an arbitrary NSError using the error option" do
+      error = NSError.errorWithDomain(0, code: 123, userInfo: nil)
+      @stub.to_fail(error: error)
+
+      @stub.response_error.should == error
+    end
+
+    it "returns self" do
+      @stub.to_fail(code: 123).should == @stub
     end
   end
 
