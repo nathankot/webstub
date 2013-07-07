@@ -145,7 +145,38 @@ module WebStub
     end
 
     def canonicalize_url(url)
-      url
+      scheme, authority, hostname, port, path, query, fragment = URI.split(url)
+
+      parts = scheme.downcase
+      parts << "://"
+
+      if authority
+        parts << authority
+        parts << "@"
+      end
+
+      parts << hostname.downcase
+
+      if port
+        well_known_ports = { "http" => 80, "https" => 443 }
+        if well_known_ports[scheme] != port
+          parts << ":#{port}"
+        end
+      end
+
+      if path != "/"
+        parts << path
+      end
+
+      if query
+        parts << "?#{query}"
+      end
+
+      if fragment
+        parts << "##{fragment}"
+      end
+
+      parts
     end
   end
 end

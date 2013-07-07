@@ -13,4 +13,19 @@ describe WebStub::URI do
       WebStub::URI.decode_www_form("a=42&b=hello").should == WebStub::URI.decode_www_form("b=hello&a=42")
     end
   end
+
+  describe ".split" do
+    it "splits a URL into its constituent parts" do
+      parts = WebStub::URI.split("http://user:password@hostname:9000/path/to/file?query=true#fragment")
+
+      parts.should ==
+        ["http", "user:password", "hostname", 9000, "/path/to/file", "query=true", "fragment"]
+    end
+
+    it "returns nil for elements not present" do
+      parts = WebStub::URI.split("http://www.yahoo.com")
+
+      parts.should == ["http", nil, "www.yahoo.com", nil, "", nil, nil]
+    end
+  end
 end

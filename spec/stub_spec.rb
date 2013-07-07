@@ -50,6 +50,30 @@ describe WebStub::Stub do
       @stub.matches?(:post, "http://www.yahoo.com/").should.be.false
     end
 
+    describe "canonicalizing URLs" do
+      it "lowercases the scheme" do
+        @stub.matches?(:get, "HTTP://www.yahoo.com/").should.be.true
+      end
+
+      it "lowercases the hostname" do
+        @stub.matches?(:get, "http://WWW.YAHOo.COM/").should.be.true
+      end
+
+      it "ignores default HTTP port" do
+        @stub.matches?(:get, "http://www.yahoo.com:80/").should.be.true
+      end
+
+      it "ignores default HTTPS port" do
+        stub = WebStub::Stub.new(:get, "https://www.yahoo.com/")
+
+        stub.matches?(:get, "https://www.yahoo.com:443/").should.be.true
+      end
+
+      it "ignores a path with \"/\"" do
+        @stub.matches?(:get, "http://www.yahoo.com:80/").should.be.true
+      end
+    end
+
     describe "body" do
       describe "with a dictionary" do
         before do

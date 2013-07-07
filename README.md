@@ -152,5 +152,4 @@ end
 TODO
 ---------
 * Handle query params similarly to form data
-* URI canonicalization
 
