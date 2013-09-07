@@ -74,7 +74,8 @@ module WebStub
       end
 
       client.URLProtocol(self, didReceiveResponse:response, cacheStoragePolicy:NSURLCacheStorageNotAllowed)
-      client.URLProtocol(self, didLoadData:@stub.response_body.dataUsingEncoding(NSUTF8StringEncoding))
+      client.URLProtocol(self, didLoadData: @stub.response_body.is_a?(NSData) ? @stub.response_body :
+                         @stub.response_body.dataUsingEncoding(NSUTF8StringEncoding))
       client.URLProtocolDidFinishLoading(self)
     end
 
