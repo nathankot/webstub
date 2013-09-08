@@ -116,6 +116,21 @@ describe WebStub::API do
       end
     end
 
+    describe "response with binary data" do
+      before do
+        @image = load_image('homer')
+        @url = 'http://somehost/image'
+        WebStub::API.stub_request(:get, @url).
+          to_return(body: load_image('homer'), content_type: "image/jpeg")
+      end
+
+      it "returns the correct body" do
+        @response = get(@url, :binary_resp)
+        @response.body.isEqualToData(@image).should == true
+      end
+    end
+
+
     describe "when a stub sets a specified status code" do
       before do
         WebStub::API.stub_request(:get, @url).
@@ -152,7 +167,7 @@ describe WebStub::API do
       end
 
       it "returns the correct body" do
-        response = get(@url, { "My-Header" => "123" })
+        response = get(@url, :string_resp, { "My-Header" => "123" })
 
         response.body.should == '{}'
       end

@@ -28,6 +28,7 @@ Motion::Project::App.setup do |app|
 
     app.files << File.join(File.dirname(__FILE__), "lib/spec/spec_delegate.rb")
     app.delegate_class = "SpecDelegate"
+    app.resources_dirs = %w(spec/resources/images)
   end
 
   app.name = gem_name

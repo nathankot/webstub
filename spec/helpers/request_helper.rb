@@ -1,9 +1,21 @@
 class Response
-  def initialize(body, response, error)
-    @body = body ? NSString.alloc.initWithData(body, encoding:NSUTF8StringEncoding) : nil
+
+  def initialize(body, response, error, resp_type)
+    allocators = {:string_resp => ->(b) { alloc_data_string(b) },
+                  :binary_resp => ->(b) { alloc_data_binary(b) }}
+
+    @body = allocators[resp_type].call(body)
     @headers = response ? response.allHeaderFields : nil
     @error = error
     @status_code = response ? response.statusCode : nil
+  end
+
+  def alloc_data_string(body)
+    body ? NSString.alloc.initWithData(body, encoding: NSUTF8StringEncoding) : nil
+  end
+
+  def alloc_data_binary(body)
+    NSData.alloc.initWithData(body)
   end
 
   attr_reader :body
@@ -12,7 +24,7 @@ class Response
   attr_reader :status_code
 end
 
-def get(url, headers={})
+def get(url, response_type = :string_resp, headers={})
   request = NSMutableURLRequest.alloc.init
   request.URL = NSURL.URLWithString(url)
 
@@ -20,7 +32,7 @@ def get(url, headers={})
     request.setValue(value, forHTTPHeaderField: key.to_s)
   end
 
-  issue_request(request)
+  issue_request(request, response_type)
 end
 
 def post(url, body)
@@ -34,16 +46,16 @@ def post(url, body)
 
       "#{key}=#{value}"
     end.join("&")
-    
-    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField:"Content-Type")
+
+    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
   end
 
   request.HTTPBody = body.dataUsingEncoding(NSUTF8StringEncoding)
 
-  issue_request(request)
+  issue_request(request, :string_resp)
 end
 
-def issue_request(request)
+def issue_request(request, response_type)
   result = {}
   queue = NSOperationQueue.alloc.init
   lock = NSConditionLock.alloc.initWithCondition(0)
@@ -59,6 +71,5 @@ def issue_request(request)
                                           end)
 
   lock.lockWhenCondition(1)
-
-  Response.new(result[:data], result[:response], result[:error])
+  Response.new(result[:data], result[:response], result[:error], response_type)
 end
