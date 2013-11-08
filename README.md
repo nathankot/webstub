@@ -5,7 +5,7 @@ What if [WebMock](https://github.com/bblimke/webmock) and [NSURLProtocol](https:
 
 Features
 ------------
-* Supports most any HTTP library that is built on NSURLConnection
+* Supports most any HTTP library that is built on NSURLConnection / NSURLSession
 * Request matching based upon HTTP method, URI, and body
 * Optionally, disable real network access
 * Familiar, delicious syntax
@@ -148,6 +148,10 @@ describe Elevate::HTTP do
   end
 end
 ```
+
+Caveats
+---------
+While WebStub supports `NSURLSession`, it does not support background sessions, as they don't allow the use of custom `NSURLProtocol` classes.
 
 TODO
 ---------
