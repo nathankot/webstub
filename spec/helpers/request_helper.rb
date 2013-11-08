@@ -71,5 +71,7 @@ def issue_request(request, response_type)
                                           end)
 
   lock.lockWhenCondition(1)
+  lock.unlockWithCondition(1)
+
   Response.new(result[:data], result[:response], result[:error], response_type)
 end
