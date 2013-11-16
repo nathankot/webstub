@@ -3,11 +3,13 @@ if Kernel.const_defined?(:NSURLSessionConfiguration)
     class << self
       alias_method :originalDefaultSessionConfiguration, :defaultSessionConfiguration
 
-      def self.defaultSessionConfiguration
+      def defaultSessionConfiguration
         config = originalDefaultSessionConfiguration
 
-        unless config.include?(WebStub::Protocol)
-          config.protocolClasses << WebStub::Protocol
+        protocols = config.protocolClasses || []
+        unless protocols.include?(WebStub::Protocol)
+          protocols << WebStub::Protocol
+          config.protocolClasses = protocols
         end
 
         config
@@ -15,11 +17,13 @@ if Kernel.const_defined?(:NSURLSessionConfiguration)
 
       alias_method :originalEphemeralSessionConfiguration, :ephemeralSessionConfiguration
 
-      def self.ephemeralSessionConfiguration
+      def ephemeralSessionConfiguration
         config = originalEphemeralSessionConfiguration
 
-        unless config.include?(WebStub::Protocol)
-          config.protocolClasses << WebStub::Protocol
+        protocols = config.protocolClasses || []
+        unless protocols.include?(WebStub::Protocol)
+          protocols << WebStub::Protocol
+          config.protocolClasses = protocols
         end
 
         config
