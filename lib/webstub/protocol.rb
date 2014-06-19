@@ -90,6 +90,9 @@ module WebStub
         return
       end
 
+      if body = self.class.parse_body(request)
+        @stub.do_callback(self.request.allHTTPHeaderFields, body)
+      end
       @timer = NSTimer.scheduledTimerWithTimeInterval(@stub.response_delay, target:self, selector: :completeLoading, userInfo:nil, repeats:false)
     end
 
