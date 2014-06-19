@@ -144,6 +144,22 @@ describe WebStub::API do
       end
     end
 
+    describe "when a stub sets a callback" do
+
+      before do
+        @stub = WebStub::API.stub_request(:post, @url)
+      end
+
+      it "calls the callback with header and body passed in" do
+        @stub.with_callback do |headers, body|
+          body.should == {"q" => "hello"}
+          body.kind_of?(Hash).should.be.true
+          headers.kind_of?(Hash).should.be.true 
+        end
+        @response = post @url, :q => "hello"
+      end
+    end
+
     describe "when a stub sets a delay" do
       before do
         WebStub::API.stub_request(:get, @url).
