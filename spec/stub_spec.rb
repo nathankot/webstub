@@ -37,6 +37,24 @@ describe WebStub::Stub do
     end
   end
 
+  describe "callback" do
+    before do
+      @called = 0
+      @stub.with_callback do |headers,body|
+        @called += 1
+        headers.should == "headers"
+        body.should == "body"
+      end
+    end
+    it "calls the callback method" do
+      @stub.callback.should.not.be.nil 
+    end
+    it "should call the callback" do
+      @stub.do_callback("headers", "body")
+      @called.should == 1
+    end
+  end
+
   describe "#matches?" do
     it "returns true when provided an identical stub" do
       @stub.matches?(:get, "http://www.yahoo.com/").should.be.true

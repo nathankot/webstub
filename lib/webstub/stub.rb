@@ -11,6 +11,7 @@ module WebStub
       @request_url = canonicalize_url(url)
       @request_headers = nil
       @request_body = nil
+      @callback = nil
 
       @response_body = ""
       @response_delay = 0.0
@@ -52,6 +53,7 @@ module WebStub
     end
 
     attr_accessor :requests
+    attr_accessor :callback
 
     def redirects?
       @response_status_code.between?(300, 399) && @response_headers["Location"] != nil
@@ -108,6 +110,16 @@ module WebStub
       end
 
       self
+    end
+
+    def do_callback(headers, body)
+      if @callback
+        @callback.call(headers, body)
+      end
+    end
+
+    def with_callback(&callback)
+      @callback = callback
     end
 
     def to_redirect(options)

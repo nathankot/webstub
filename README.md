@@ -149,6 +149,35 @@ describe Elevate::HTTP do
 end
 ```
 
+Callbacks
+----------
+
+Sometimes, you may want to inspect the request made for a given URL. In this case, you can use the `with_callback` method of the stub returned by `stub_request` to add a callback hook:
+
+```ruby
+describe Elevate:HTTP do
+  extend WebStub::SpecHelpers
+
+  describe ".post" do
+    it "synchronously issues an HTTP POST request" do
+      stub = stub_request(:post, "http://www.example.com/")
+
+      stub.with_callback do |headers, body|
+        headers.kind_of?(Hash).should == true
+        body.kind_of?(Hash).should == true
+        body.should == {"key" => "value"}
+      end
+
+      Elevate::HTTP.post("http://www.example.com/", json: {key: "value"})
+    end
+  end
+end
+
+
+
+```
+
+
 Caveats
 ---------
 While WebStub supports `NSURLSession`, it does not support background sessions, as they don't allow the use of custom `NSURLProtocol` classes.
