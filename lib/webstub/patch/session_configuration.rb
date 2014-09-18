@@ -6,7 +6,7 @@ if Kernel.const_defined?(:NSURLSessionConfiguration)
       def defaultSessionConfiguration
         config = originalDefaultSessionConfiguration
 
-        protocols = config.protocolClasses || []
+        protocols = config.protocolClasses.clone || []
         unless protocols.include?(WebStub::Protocol)
           protocols << WebStub::Protocol
           config.protocolClasses = protocols
@@ -20,7 +20,7 @@ if Kernel.const_defined?(:NSURLSessionConfiguration)
       def ephemeralSessionConfiguration
         config = originalEphemeralSessionConfiguration
 
-        protocols = config.protocolClasses || []
+        protocols = config.protocolClasses.clone || []
         unless protocols.include?(WebStub::Protocol)
           protocols << WebStub::Protocol
           config.protocolClasses = protocols
