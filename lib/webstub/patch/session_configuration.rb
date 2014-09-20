@@ -8,7 +8,7 @@ if Kernel.const_defined?(:NSURLSessionConfiguration)
 
         protocols = config.protocolClasses.clone || []
         unless protocols.include?(WebStub::Protocol)
-          protocols << WebStub::Protocol
+          protocols.unshift WebStub::Protocol
           config.protocolClasses = protocols
         end
 
@@ -22,7 +22,7 @@ if Kernel.const_defined?(:NSURLSessionConfiguration)
 
         protocols = config.protocolClasses.clone || []
         unless protocols.include?(WebStub::Protocol)
-          protocols << WebStub::Protocol
+          protocols.unshift WebStub::Protocol
           config.protocolClasses = protocols
         end
 
