@@ -47,7 +47,7 @@ describe WebStub::Stub do
       end
     end
     it "calls the callback method" do
-      @stub.callback.should.not.be.nil 
+      @stub.callback.should.not.be.nil
     end
     it "should call the callback" do
       @stub.do_callback("headers", "body")
@@ -90,6 +90,14 @@ describe WebStub::Stub do
       it "ignores a path with \"/\"" do
         @stub.matches?(:get, "http://www.yahoo.com:80/").should.be.true
       end
+
+      it 'strips any trailing ?' do
+        @stub.matches?(:get, "http://www.yahoo.com/?").should.be.true
+      end
+
+      it 'strips any trailing #' do
+        @stub.matches?(:get, "http://www.yahoo.com/#").should.be.true
+      end
     end
 
     describe "body" do
@@ -100,7 +108,7 @@ describe WebStub::Stub do
         end
 
         it "returns false when the body does not match" do
-          @stub.matches?(:post, "http://www.yahoo.com/search", { :body => {}}).should.be.false          
+          @stub.matches?(:post, "http://www.yahoo.com/search", { :body => {}}).should.be.false
         end
 
         it "returns true when the body matches (with string keys)" do
@@ -135,12 +143,12 @@ describe WebStub::Stub do
       end
 
       it "returns true when the headers are included" do
-        @stub.matches?(:get, "http://www.yahoo.com/search", 
+        @stub.matches?(:get, "http://www.yahoo.com/search",
                        headers: { "X-Extra" => "42", "Authorization" => "secret" }).should.be.true
       end
 
       it "returns false when any of the headers are absent" do
-        @stub.matches?(:get, "http://www.yahoo.com/search", 
+        @stub.matches?(:get, "http://www.yahoo.com/search",
                        headers: { "X-Extra" => "42" }).should.be.false
       end
     end
@@ -166,7 +174,7 @@ describe WebStub::Stub do
 
   describe "#response_body" do
     it "returns the response body" do
-      @stub.response_body.should == "" 
+      @stub.response_body.should == ""
     end
   end
 
@@ -247,7 +255,7 @@ describe WebStub::Stub do
 
     it "sets response headers" do
       @stub.to_return(body: "{}", headers: { "Content-Type" => "application/json" })
-      @stub.response_headers.should.be == { "Content-Type" => "application/json" } 
+      @stub.response_headers.should.be == { "Content-Type" => "application/json" }
     end
 
     it "sets the response status code" do
