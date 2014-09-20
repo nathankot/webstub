@@ -7,7 +7,7 @@ module WebStub
       raise ArgumentError, "invalid method name" unless METHODS.include? @request_method
 
       @requests = 0
-      
+
       @request_url = canonicalize_url(url)
       @request_headers = nil
       @request_body = nil
@@ -75,7 +75,7 @@ module WebStub
       elsif code = options.delete(:code)
         @response_error = NSError.errorWithDomain(NSURLErrorDomain, code: code, userInfo: nil)
       else
-        raise ArgumentError, "to_fail requires either the code or error option" 
+        raise ArgumentError, "to_fail requires either the code or error option"
       end
 
       self
@@ -180,11 +180,11 @@ module WebStub
         parts << path
       end
 
-      if query
+      if query && !query.empty?
         parts << "?#{query}"
       end
 
-      if fragment
+      if fragment && !fragment.empty?
         parts << "##{fragment}"
       end
 
