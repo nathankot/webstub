@@ -1,4 +1,4 @@
-WebStub [![Code Climate](https://codeclimate.com/github/mattgreen/webstub.png)](https://codeclimate.com/github/mattgreen/webstub) [![Travis](https://api.travis-ci.org/mattgreen/webstub.png)](https://travis-ci.org/mattgreen/webstub) [![Gem Version](https://badge.fury.io/rb/webstub.png)](http://badge.fury.io/rb/webstub)
+WebStub [![Code Climate](https://codeclimate.com/github/mattgreen/webstub.png)](https://codeclimate.com/github/mattgreen/webstub) [![Travis](https://api.travis-ci.org/nathankot/webstub.png)](https://travis-ci.org/nathankot/webstub) [![Gem Version](https://badge.fury.io/rb/webstub.png)](http://badge.fury.io/rb/webstub)
 ======
 
 What if [WebMock](https://github.com/bblimke/webmock) and [NSURLProtocol](https://developer.apple.com/library/mac/#documentation/Cocoa/Reference/Foundation/Classes/NSURLProtocol_Class/Reference/Reference.html) had a baby?
