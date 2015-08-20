@@ -100,6 +100,16 @@ describe WebStub::Stub do
       end
     end
 
+    describe "query string" do
+      before do
+        @stub = WebStub::Stub.new(:get, "http://www.yahoo.com/search?count=1")
+      end
+
+      it "returns true when the query string matches" do
+        @stub.matches?(:get, "http://www.yahoo.com/search?count=1").should.be.true
+      end
+    end
+
     describe "body" do
       describe "with a dictionary" do
         before do
