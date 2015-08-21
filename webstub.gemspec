@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["mattgreenrocks@gmail.com"]
   gem.description   = "Easily stub out HTTP responses in RubyMotion specs"
   gem.summary       = "Easily stub out HTTP responses in RubyMotion specs"
-  gem.homepage      = "https://github.com/mattgreen/webstub"
+  gem.homepage      = "https://github.com/nathankot/webstub"
 
   gem.files         = `git ls-files`.split($\)
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
