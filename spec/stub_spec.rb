@@ -108,6 +108,10 @@ describe WebStub::Stub do
       it "returns true when the query string matches" do
         @stub.matches?(:get, "http://www.yahoo.com/search?count=1").should.be.true
       end
+
+      it "strips any trailing &" do
+        @stub.matches?(:get, "http://www.yahoo.com/search?count=1&").should.be.true
+      end
     end
 
     describe "body" do

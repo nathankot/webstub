@@ -181,7 +181,8 @@ module WebStub
       end
 
       if query && !query.empty?
-        parts << "?#{query}"
+        q = query.chomp("&")
+        parts << "?#{q}"
       end
 
       if fragment && !fragment.empty?
