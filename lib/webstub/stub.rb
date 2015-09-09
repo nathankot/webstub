@@ -181,7 +181,7 @@ module WebStub
       end
 
       if query && !query.empty?
-        q = query.chomp("&")
+        q = query.split("&").sort.join("&")
         parts << "?#{q}"
       end
 

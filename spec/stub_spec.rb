@@ -102,15 +102,19 @@ describe WebStub::Stub do
 
     describe "query string" do
       before do
-        @stub = WebStub::Stub.new(:get, "http://www.yahoo.com/search?count=1")
+        @stub = WebStub::Stub.new(:get, "http://www.yahoo.com/search?count=1&q=whiskey")
       end
 
       it "returns true when the query string matches" do
-        @stub.matches?(:get, "http://www.yahoo.com/search?count=1").should.be.true
+        @stub.matches?(:get, "http://www.yahoo.com/search?count=1&q=whiskey").should.be.true
       end
 
       it "strips any trailing &" do
-        @stub.matches?(:get, "http://www.yahoo.com/search?count=1&").should.be.true
+        @stub.matches?(:get, "http://www.yahoo.com/search?count=1&q=whiskey&").should.be.true
+      end
+
+      it "does not depend on the order of query parameters" do
+        @stub.matches?(:get, "http://www.yahoo.com/search?q=whiskey&count=1").should.be.true
       end
     end
 
