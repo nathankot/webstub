@@ -82,7 +82,7 @@ module WebStub
     def startLoading
       request = self.request
       client = self.client
-    
+
       unless @stub = self.class.stub_for(self.request)
         error = NSError.errorWithDomain("WebStub", code:0, userInfo:{ NSLocalizedDescriptionKey: "network access is not permitted!"})
         client.URLProtocol(self, didFailWithError:error)
@@ -90,9 +90,7 @@ module WebStub
         return
       end
 
-      if body = self.class.parse_body(request)
-        @stub.do_callback(self.request.allHTTPHeaderFields, body)
-      end
+      @stub.do_callback(self.request.allHTTPHeaderFields || {}, self.class.parse_body(request))
       @timer = NSTimer.scheduledTimerWithTimeInterval(@stub.response_delay, target:self, selector: :completeLoading, userInfo:nil, repeats:false)
     end
 

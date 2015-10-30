@@ -1,7 +1,7 @@
 describe WebStub::API do
   before do
     WebStub::API.reset_stubs
-    
+
     @url = "http://www.example.com/"
     @request = NSURLRequest.requestWithURL(NSURL.URLWithString(@url))
   end
@@ -10,7 +10,7 @@ describe WebStub::API do
     it "returns the newly added stub" do
       WebStub::API.stub_request(:get, @url).should.not.be.nil
     end
-    
+
     before { WebStub::API.disable_network_access! }
     after  { WebStub::API.enable_network_access! }
 
@@ -146,17 +146,23 @@ describe WebStub::API do
 
     describe "when a stub sets a callback" do
 
-      before do
-        @stub = WebStub::API.stub_request(:post, @url)
-      end
-
       it "calls the callback with header and body passed in" do
-        @stub.with_callback do |headers, body|
+        stub = WebStub::API.stub_request(:post, @url)
+        stub.with_callback do |headers, body|
           body.should == {"q" => "hello"}
           body.kind_of?(Hash).should.be.true
-          headers.kind_of?(Hash).should.be.true 
+          headers.kind_of?(Hash).should.be.true
         end
         @response = post @url, :q => "hello"
+      end
+
+      it "calls the callback with just the header passed in" do
+        stub = WebStub::API.stub_request(:get, @url)
+        stub.with_callback do |headers, body|
+          body.should.be.nil
+          headers.kind_of?(Hash).should.be.true
+        end
+        @response = get @url
       end
     end
 
