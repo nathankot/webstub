@@ -58,6 +58,10 @@ module WebStub
 
       if @stub.redirects?
         url = NSURL.URLWithString(@stub.response_headers["Location"])
+        if request.URL == url
+          # Can't redirect to same URL. Since iOS 10, it will cause a crash.
+          return
+        end
         redirect_request = NSURLRequest.requestWithURL(url)
 
         client.URLProtocol(self, wasRedirectedToRequest: redirect_request, redirectResponse: response)
