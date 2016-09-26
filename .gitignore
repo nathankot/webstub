@@ -6,3 +6,5 @@ resources/*.nib
 resources/*.momd
 resources/*.storyboardc
 Gemfile.lock
+
+webstub-*.gem
